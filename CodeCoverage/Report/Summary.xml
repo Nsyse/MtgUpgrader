@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoverageReport scope="Summary">
+  <Summary>
+    <Generatedon>2021-07-04 - 12:55:29</Generatedon>
+    <Parser>MultiReportParser (3x OpenCoverParser)</Parser>
+    <Assemblies>2</Assemblies>
+    <Classes>6</Classes>
+    <Files>6</Files>
+    <Coveredlines>115</Coveredlines>
+    <Uncoveredlines>132</Uncoveredlines>
+    <Coverablelines>247</Coverablelines>
+    <Totallines>518</Totallines>
+    <Linecoverage>46.5</Linecoverage>
+    <Coveredbranches>0</Coveredbranches>
+    <Totalbranches>0</Totalbranches>
+  </Summary>
+  <Coverage>
+    <Assembly name="MtgUpgrader" classes="4" coverage="27" coveredlines="49" coverablelines="181" totallines="285" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="Card" coverage="31" coveredlines="45" coverablelines="145" totallines="209" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="HashSetExtensions" coverage="0" coveredlines="0" coverablelines="4" totallines="11" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="IEnumerableExtensions" coverage="0" coveredlines="0" coverablelines="3" totallines="10" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Storage" coverage="13.7" coveredlines="4" coverablelines="29" totallines="55" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    </Assembly>
+    <Assembly name="Tests" classes="2" coverage="100" coveredlines="66" coverablelines="66" totallines="233" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="CardPropertyTests" coverage="100" coveredlines="9" coverablelines="9" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="CardRelationTests" coverage="100" coveredlines="57" coverablelines="57" totallines="209" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    </Assembly>
+  </Coverage>
+</CoverageReport>

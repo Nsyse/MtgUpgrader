@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coverage version="1.0" date="2021-07-04_00-47-59" tag="">
+  <assembly name="MtgUpgrader">
+    <class name="Card" coveredlines="140" coverablelines="144" totallines="203" coveredbranches="0" totalbranches="0" />
+    <class name="HashSetExtensions" coveredlines="0" coverablelines="4" totallines="11" coveredbranches="0" totalbranches="0" />
+    <class name="IEnumerableExtensions" coveredlines="3" coverablelines="3" totallines="10" coveredbranches="0" totalbranches="0" />
+  </assembly>
+  <assembly name="Tests">
+    <class name="CardPropertyTests" coveredlines="9" coverablelines="9" totallines="22" coveredbranches="0" totalbranches="0" />
+    <class name="CardRelationTests" coveredlines="129" coverablelines="129" totallines="177" coveredbranches="0" totalbranches="0" />
+  </assembly>
+</coverage>
