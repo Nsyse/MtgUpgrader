@@ -2,22 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
+[Serializable]
 public class Card
 {
     private class ModificationWouldCreateLoopException : Exception
     {
     }
-    
-    private HashSet<Card> _manuallyRegisteredBetterCards = new HashSet<Card>();
-    private HashSet<Card> _immediatelyBetterCards = new HashSet<Card>();
-    private HashSet<Card> _immediatelyWorseCards = new HashSet<Card>();
 
-    private readonly string _id;
+    [SerializeField] public List<string> ManuallyRegisteredBetterCardsIds = new List<string>();
+    [SerializeField] private string Id;
+    
+    private ICardCollection _manuallyRegisteredBetterCards = new CardCollection();
+    private ICardCollection _immediatelyBetterCards = new CardCollection();
+    private ICardCollection _immediatelyWorseCards = new CardCollection();
+
+    public Card()
+    {
+        _manuallyRegisteredBetterCards = new CardCollection();
+        _immediatelyBetterCards = new CardCollection();
+        _immediatelyWorseCards = new CardCollection();
+    }
 
     public Card(string id)
     {
-        _id = id;
+        Id = id;
     }
 
     public bool IsOutclassed()
@@ -43,36 +53,36 @@ public class Card
         RemoveImmediateUpgrade(upgrade);
         RecursivelyUnsilenceRelevantManualUpgrades();
     }
-    
+
     public bool MatchesId(string id)
     {
-        return _id.Equals(id);
+        return Id.Equals(id);
     }
 
     public bool IsOrphaned()
     {
         return _immediatelyBetterCards.IsEmpty() && _immediatelyWorseCards.IsEmpty();
     }
-    
+
     public bool IsImmediatelyWorseThan(Card otherCard)
     {
-        return SetContainsCard(_immediatelyBetterCards, otherCard);
+        return _immediatelyBetterCards.Contains(otherCard);
     }
-    
+
     public bool IsWorseThan(Card otherCard)
     {
         if (IsImmediatelyWorseThan(otherCard))
             return true;
         return _immediatelyBetterCards.Any(x => x.IsWorseThan(otherCard));
     }
-    
+
     public bool IsBetterThan(Card otherCard)
     {
         if (IsImmediatelyBetterThan(otherCard))
             return true;
         return _immediatelyWorseCards.Any(x => x.IsBetterThan(otherCard));
     }
-    
+
     public bool IsRelated(Card otherCard, HashSet<Card> testedCards = null)
     {
         var immediatelyRelatedCards = RetrieveAlLImmediatelyRelatedCards();
@@ -84,7 +94,7 @@ public class Card
         testedCards.Add(this);
 
         foreach (var relatedCard in immediatelyRelatedCards)
-            if(!testedCards.Any(x => x.MatchesId(relatedCard)))
+            if (!testedCards.Any(x => x.MatchesId(relatedCard)))
                 if (relatedCard.IsRelated(otherCard, testedCards))
                     return true;
         return false;
@@ -93,33 +103,29 @@ public class Card
     private void RecursivelyUnsilenceRelevantManualUpgrades()
     {
         foreach (var manualUpgrade in _manuallyRegisteredBetterCards)
-            if(!IsWorseThan(manualUpgrade))
+            if (!IsWorseThan(manualUpgrade))
                 AddSingleUpgrade(manualUpgrade);
-        
+
         foreach (var card in _immediatelyWorseCards)
             card.RecursivelyUnsilenceRelevantManualUpgrades();
     }
 
     private void RemoveManualUpgrade(Card upgrade)
     {
-        RemoveCardFromSet(_manuallyRegisteredBetterCards, upgrade);
-    }
-
-    private void RemoveCardFromSet(HashSet<Card> set, Card card)
-    {
-        set.RemoveWhere(x => x.MatchesId(card));
+        ManuallyRegisteredBetterCardsIds.Remove(upgrade.Id);
+        _manuallyRegisteredBetterCards.RemoveCardById(upgrade.Id);
     }
 
     private void RemoveImmediateUpgrade(Card upgrade)
     {
-        RemoveCardFromSet(_immediatelyBetterCards, upgrade);
+        _immediatelyBetterCards.RemoveCardById(upgrade.Id);
     }
 
     private void TryAddSingleUpgrade(Card upgrade)
     {
         if (AddingUpgradeWouldCreateLoop(upgrade))
             throw new ModificationWouldCreateLoopException();
-        
+
         RecursivelyRemoveRedundantUpgrades(upgrade);
         AddSingleUpgradeIfNew(upgrade);
         upgrade.AddDowngrade(this);
@@ -130,13 +136,12 @@ public class Card
         RecursivelyRemoveImmediateRedundantUpgrades(upgrade);
         foreach (var card in _immediatelyWorseCards)
             card.RecursivelyRemoveRedundantUpgrades(upgrade);
-        
     }
 
     private void RecursivelyRemoveImmediateRedundantUpgrades(Card upgrade)
     {
         RemoveImmediateUpgrade(upgrade);
-        foreach (var card  in upgrade._immediatelyBetterCards)
+        foreach (var card in upgrade._immediatelyBetterCards)
             RecursivelyRemoveImmediateRedundantUpgrades(card);
     }
 
@@ -149,7 +154,7 @@ public class Card
     {
         return _immediatelyWorseCards.Any(x => x.MatchesId(upgrade));
     }
-    
+
     private bool UpgradeIsIndirectlyInferior(Card upgrade)
     {
         return _immediatelyWorseCards.Any(x => x.AddingUpgradeWouldCreateLoop(upgrade));
@@ -157,7 +162,7 @@ public class Card
 
     private bool IsImmediatelyBetterThan(Card otherCard)
     {
-        return SetContainsCard(_immediatelyWorseCards, otherCard);
+        return _immediatelyWorseCards.Contains(otherCard);
     }
 
     private HashSet<Card> LazyInitializeTestedCards(HashSet<Card> testedCards)
@@ -187,6 +192,10 @@ public class Card
 
     private void RegisterUpgrade(Card upgrade)
     {
+        if (!ManuallyRegisteredBetterCardsIds.Contains(upgrade.Id))
+        {
+            ManuallyRegisteredBetterCardsIds.Add(upgrade.Id);
+        }
         _manuallyRegisteredBetterCards.Add(upgrade);
         _immediatelyBetterCards.Add(upgrade);
     }
@@ -199,11 +208,11 @@ public class Card
 
     private bool AlreadyHasUpgradeRelationship(Card otherCard)
     {
-        return SetContainsCard(_immediatelyBetterCards, otherCard);
+        return _immediatelyBetterCards.Contains(otherCard);
     }
 
     public bool MatchesId(Card otherCard)
     {
-        return MatchesId(otherCard._id);
+        return MatchesId(otherCard.Id);
     }
 }

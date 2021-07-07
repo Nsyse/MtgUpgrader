@@ -1,57 +1,100 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using UnityEngine;
 
-public class Storage
+[Serializable]
+public class Storage : ICardCollection
 {
-    private HashSet<Card> _cards = new HashSet<Card>();
-    private bool _isEmpty = true;
+    [SerializeField]
+    private CardCollection _cards = new CardCollection();
+
+    public void Save(string path, string storageName)
+    {
+        var jsonStorage = JsonUtility.ToJson(this);
+        string filePath = System.IO.Path.Combine(path, $"{storageName}.json");
+        SaveStorageJsonAtPath(filePath, jsonStorage);
+    }
+
+    private void SaveStorageJsonAtPath(string path, string jsonStorage)
+    {
+        File.WriteAllText( path, jsonStorage);
+    }
+
+    public void Load(string path, string storageName)
+    {
+        try
+        {
+            TryLoadCards(path + $"/{storageName}.json");
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            LogCantFindStorageFile();
+        }
+        
+    }
+
+    #region ICardCollection
+
+    public bool Remove(Card item)
+    {
+        throw new NotImplementedException();
+    }
+
     public int Count => _cards.Count;
-
-    public bool IsEmpty()
-    {
-        return _cards.IsEmpty();
-    }
-
-    public void AddCard(Card card)
-    {
-        AddCardIfNew(card);
-    }
-
-    public void RemoveCard(string id)
-    {
-        _cards.RemoveWhere(x => x.MatchesId(id));
-    }
-
-    public void Save(string storageName)
+    public bool IsReadOnly { get; }
+    public bool IsEmpty() => _cards.IsEmpty();
+    public void RemoveCardById(string id) => _cards.RemoveCardById(id);
+    public void Add(Card item)
     {
         throw new NotImplementedException();
     }
 
-    public void Load(string storageName)
+    public void Clear() => _cards.Clear();
+
+    public bool Contains(Card card) => _cards.Contains(card);
+    public void CopyTo(Card[] array, int arrayIndex)
     {
         throw new NotImplementedException();
     }
+
+    public void AddCard(Card newCard) => _cards.Add(newCard);
     
-    private void AddCardIfNew(Card card)
+    public IEnumerator<Card> GetEnumerator() => _cards.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    #endregion
+    
+    #region private
+    private void LogCantFindStorageFile()
     {
-        if (CardIsNew(card))
-            AddNewCard(card);
+        Debug.LogError("Provided storage file does not exist.");
     }
 
-    private void AddNewCard(Card card)
+    private void TryLoadCards(string filePath)
     {
-        _cards.Add(card);
+        var jsonRead = File.ReadAllText(filePath);
+        _cards = JsonUtility.FromJson<Storage>(jsonRead)._cards;
+        foreach (var card in _cards)
+        {
+            RebuildRelationships(card);
+        }
     }
 
-    private bool CardIsNew(Card card)
+    private void RebuildRelationships(Card card)
     {
-        return !Contains(card);
+        foreach (string manualUpgrade in card.ManuallyRegisteredBetterCardsIds)
+        {
+            var upgrade = _cards.FindCardById(manualUpgrade);
+            card.AddSingleUpgrade(upgrade);
+        }
     }
 
-    public bool Contains(Card card)
+    #endregion
+
+    public Card FindCardById(string id)
     {
-        return _cards.Any(x=> x.MatchesId(card));
+        return _cards.FindCardById(id);
     }
 }

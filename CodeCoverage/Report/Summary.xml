@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CoverageReport scope="Summary">
   <Summary>
-    <Generatedon>2021-07-04 - 12:55:29</Generatedon>
+    <Generatedon>2021-07-07 - 00:17:12</Generatedon>
     <Parser>MultiReportParser (3x OpenCoverParser)</Parser>
     <Assemblies>2</Assemblies>
-    <Classes>6</Classes>
-    <Files>6</Files>
-    <Coveredlines>115</Coveredlines>
-    <Uncoveredlines>132</Uncoveredlines>
-    <Coverablelines>247</Coverablelines>
-    <Totallines>518</Totallines>
-    <Linecoverage>46.5</Linecoverage>
+    <Classes>7</Classes>
+    <Files>7</Files>
+    <Coveredlines>231</Coveredlines>
+    <Uncoveredlines>88</Uncoveredlines>
+    <Coverablelines>319</Coverablelines>
+    <Totallines>651</Totallines>
+    <Linecoverage>72.4</Linecoverage>
     <Coveredbranches>0</Coveredbranches>
     <Totalbranches>0</Totalbranches>
   </Summary>
   <Coverage>
-    <Assembly name="MtgUpgrader" classes="4" coverage="27" coveredlines="49" coverablelines="181" totallines="285" branchcoverage="" coveredbranches="0" totalbranches="0">
-      <Class name="Card" coverage="31" coveredlines="45" coverablelines="145" totallines="209" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    <Assembly name="MtgUpgrader" classes="5" coverage="65.2" coveredlines="165" coverablelines="253" totallines="418" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="Card" coverage="66" coveredlines="101" coverablelines="153" totallines="218" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="CardCollection" coverage="71.7" coveredlines="28" coverablelines="39" totallines="79" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="HashSetExtensions" coverage="0" coveredlines="0" coverablelines="4" totallines="11" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="IEnumerableExtensions" coverage="0" coveredlines="0" coverablelines="3" totallines="10" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="Storage" coverage="13.7" coveredlines="4" coverablelines="29" totallines="55" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Storage" coverage="66.6" coveredlines="36" coverablelines="54" totallines="100" branchcoverage="" coveredbranches="0" totalbranches="0" />
     </Assembly>
     <Assembly name="Tests" classes="2" coverage="100" coveredlines="66" coverablelines="66" totallines="233" branchcoverage="" coveredbranches="0" totalbranches="0">
       <Class name="CardPropertyTests" coverage="100" coveredlines="9" coverablelines="9" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" />

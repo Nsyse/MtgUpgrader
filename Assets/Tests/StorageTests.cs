@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -6,15 +7,20 @@ using UnityEngine.TestTools;
 [ExcludeFromCodeCoverage]
 public class StorageTests
 {
+    private const string STORAGE_NAME = "TestStorage";
     private string LBOLT = "Lightning Bolt";
     private string SHOCK = "Shock";
     private Storage _storage;
-    private string TEST_FOLDER = "testStorage";
+    private string TEST_FOLDER = Application.persistentDataPath + @"/testStorage";
+    private Card _bolt;
+    private Card _shock;
 
     [SetUp]
     public void CreateCleanCards()
     {
         _storage = new Storage();
+        _bolt = AddLightningBolt();
+        _shock = AddShock();
     }
     
     private Card AddCard(string id)
@@ -35,8 +41,9 @@ public class StorageTests
     }
     
     [Test]
-    public void NewStorageIsEmpty()
+    public void ClearedStorageIsEmpty()
     {
+        _storage.Clear();
         Assert.IsTrue(_storage.IsEmpty());
     }
     
@@ -50,17 +57,18 @@ public class StorageTests
     [Test]
     public void RemovingAddedCardRemakesStorageEmpty()
     {
+        _storage.Clear();
         AddLightningBolt();
-        _storage.RemoveCard(LBOLT);
+        _storage.RemoveCardById(LBOLT);
         Assert.IsTrue(_storage.IsEmpty());
     }
-    
+
     [Test]
     public void RemovingOneOfTwoCardKeepsStorageNotEmpty()
     {
         AddLightningBolt();
         AddShock();
-        _storage.RemoveCard(LBOLT);
+        _storage.RemoveCardById(LBOLT);
         Assert.IsFalse(_storage.IsEmpty());
     }
     
@@ -68,8 +76,7 @@ public class StorageTests
     public void CantAddAlreadyExistingCard()
     {
         AddLightningBolt();
-        AddLightningBolt();
-        Assert.AreEqual(1, _storage.Count);
+        Assert.AreEqual(2, _storage.Count);
     }
 
     [Test]
@@ -83,29 +90,58 @@ public class StorageTests
     public void LoadingMissingFileFails()
     {
         LogAssert.Expect(LogType.Error, "Provided storage file does not exist.");
-        _storage.Load("MissingFile");
+        _storage.Load("MissingPath","MissingFile");
     }
     
     [Test]
     public void StorageCanSaveAndLoadCard()
     {
-        var bolt = AddLightningBolt();
-        Assert.IsTrue(_storage.Contains(bolt));
+        _bolt = AddLightningBolt();
+        Assert.IsTrue(_storage.Contains(_bolt));
         SaveStorage();
-        Assert.IsTrue(_storage.Contains(bolt));
+        Assert.IsTrue(_storage.Contains(_bolt));
         
         _storage = new Storage();
         LoadStorage();
+        Assert.IsTrue(_storage.Count == 2);
+        Assert.IsTrue(_storage.Contains(_bolt));
+    }
+    
+    [Test]
+    public void StorageCanRestoreUpgradeRelationships()
+    {
+        AddShockToBolt();
+        CheckContainsBoltChain();
+        SaveStorage();
+        CheckContainsBoltChain();
+        
+        _storage = new Storage();
+        LoadStorage();
+        CheckContainsBoltChain();
+    }
+
+    private void AddShockToBolt()
+    {
+        _shock.AddSingleUpgrade(_bolt);
+    }
+
+    private void CheckContainsBoltChain()
+    {
+        var bolt = _storage.FindCardById(LBOLT);
+        var shock = _storage.FindCardById(SHOCK);
         Assert.IsTrue(_storage.Contains(bolt));
+        Assert.IsTrue(_storage.Contains(shock));
+        Assert.IsTrue(shock.IsWorseThan(bolt));
     }
 
     private void SaveStorage()
     {
-        _storage.Save(TEST_FOLDER);
+        DirectoryInfo di = Directory.CreateDirectory(TEST_FOLDER);
+        _storage.Save(TEST_FOLDER, STORAGE_NAME);
     }
     
     private void LoadStorage()
     {
-        _storage.Load(TEST_FOLDER);
+        _storage.Load(TEST_FOLDER, STORAGE_NAME);
     }
 }
