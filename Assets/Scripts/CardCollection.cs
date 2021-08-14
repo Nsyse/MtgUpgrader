@@ -8,10 +8,10 @@ using UnityEngine;
 public class CardCollection : ICardCollection
 {
     [SerializeField]
-    private List<Card> _cards = new List<Card>();
+    protected List<Card> _cards = new List<Card>();
     public bool Remove(Card item)
     {
-        throw new NotImplementedException();
+        return RemoveCardById(item.Id);
     }
 
     public int Count => _cards.Count;
@@ -39,9 +39,10 @@ public class CardCollection : ICardCollection
         throw new NotImplementedException();
     }
 
-    public void RemoveCardById(string id)
+    private bool RemoveCardById(string id)
     {
-        _cards.RemoveAll(x => x.MatchesId(id));
+        int qtyRemoved = _cards.RemoveAll(x => x.MatchesId(id));
+        return qtyRemoved > 0;
     }
 
     #region private functions

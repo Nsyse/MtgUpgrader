@@ -26,7 +26,7 @@ public class StorageTests
     private Card AddCard(string id)
     {
         var newCard = new Card(id);
-        _storage.AddCard(newCard);
+        _storage.Add(newCard);
         return newCard;
     }
     
@@ -59,7 +59,7 @@ public class StorageTests
     {
         _storage.Clear();
         AddLightningBolt();
-        _storage.RemoveCardById(LBOLT);
+        _storage.Remove(_bolt);
         Assert.IsTrue(_storage.IsEmpty());
     }
 
@@ -68,7 +68,7 @@ public class StorageTests
     {
         AddLightningBolt();
         AddShock();
-        _storage.RemoveCardById(LBOLT);
+        _storage.Remove(_bolt);
         Assert.IsFalse(_storage.IsEmpty());
     }
     

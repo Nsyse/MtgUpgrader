@@ -5,11 +5,8 @@ using System.IO;
 using UnityEngine;
 
 [Serializable]
-public class Storage : ICardCollection
+public class Storage : CardCollection
 {
-    [SerializeField]
-    private CardCollection _cards = new CardCollection();
-
     public void Save(string path, string storageName)
     {
         var jsonStorage = JsonUtility.ToJson(this);
@@ -35,37 +32,6 @@ public class Storage : ICardCollection
         
     }
 
-    #region ICardCollection
-
-    public bool Remove(Card item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public int Count => _cards.Count;
-    public bool IsReadOnly { get; }
-    public bool IsEmpty() => _cards.IsEmpty();
-    public void RemoveCardById(string id) => _cards.RemoveCardById(id);
-    public void Add(Card item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Clear() => _cards.Clear();
-
-    public bool Contains(Card card) => _cards.Contains(card);
-    public void CopyTo(Card[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void AddCard(Card newCard) => _cards.Add(newCard);
-    
-    public IEnumerator<Card> GetEnumerator() => _cards.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-    #endregion
-    
     #region private
     private void LogCantFindStorageFile()
     {
@@ -86,15 +52,10 @@ public class Storage : ICardCollection
     {
         foreach (string manualUpgrade in card.ManuallyRegisteredBetterCardsIds)
         {
-            var upgrade = _cards.FindCardById(manualUpgrade);
+            var upgrade = FindCardById(manualUpgrade);
             card.AddSingleUpgrade(upgrade);
         }
     }
 
     #endregion
-
-    public Card FindCardById(string id)
-    {
-        return _cards.FindCardById(id);
-    }
 }

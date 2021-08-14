@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class Card
@@ -12,8 +11,14 @@ public class Card
     }
 
     [SerializeField] public List<string> ManuallyRegisteredBetterCardsIds = new List<string>();
-    [SerializeField] private string Id;
-    
+
+    [SerializeField] private string _id;
+    public string Id
+    {
+        get => _id;
+        private set => _id = value;
+    }
+
     private ICardCollection _manuallyRegisteredBetterCards = new CardCollection();
     private ICardCollection _immediatelyBetterCards = new CardCollection();
     private ICardCollection _immediatelyWorseCards = new CardCollection();
@@ -113,12 +118,12 @@ public class Card
     private void RemoveManualUpgrade(Card upgrade)
     {
         ManuallyRegisteredBetterCardsIds.Remove(upgrade.Id);
-        _manuallyRegisteredBetterCards.RemoveCardById(upgrade.Id);
+        _manuallyRegisteredBetterCards.Remove(upgrade);
     }
 
     private void RemoveImmediateUpgrade(Card upgrade)
     {
-        _immediatelyBetterCards.RemoveCardById(upgrade.Id);
+        _immediatelyBetterCards.Remove(upgrade);
     }
 
     private void TryAddSingleUpgrade(Card upgrade)
