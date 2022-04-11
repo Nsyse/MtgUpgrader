@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CoverageReport scope="Summary">
   <Summary>
-    <Generatedon>2021-07-07 - 00:17:12</Generatedon>
-    <Parser>MultiReportParser (3x OpenCoverParser)</Parser>
+    <Generatedon>2021-08-22 - 16:33:56</Generatedon>
+    <Parser>MultiReportParser (4x OpenCoverParser)</Parser>
     <Assemblies>2</Assemblies>
-    <Classes>7</Classes>
-    <Files>7</Files>
-    <Coveredlines>231</Coveredlines>
-    <Uncoveredlines>88</Uncoveredlines>
-    <Coverablelines>319</Coverablelines>
-    <Totallines>651</Totallines>
-    <Linecoverage>72.4</Linecoverage>
+    <Classes>10</Classes>
+    <Files>9</Files>
+    <Coveredlines>323</Coveredlines>
+    <Uncoveredlines>66</Uncoveredlines>
+    <Coverablelines>389</Coverablelines>
+    <Totallines>737</Totallines>
+    <Linecoverage>83</Linecoverage>
     <Coveredbranches>0</Coveredbranches>
     <Totalbranches>0</Totalbranches>
   </Summary>
   <Coverage>
-    <Assembly name="MtgUpgrader" classes="5" coverage="65.2" coveredlines="165" coverablelines="253" totallines="418" branchcoverage="" coveredbranches="0" totalbranches="0">
-      <Class name="Card" coverage="66" coveredlines="101" coverablelines="153" totallines="218" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="CardCollection" coverage="71.7" coveredlines="28" coverablelines="39" totallines="79" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="HashSetExtensions" coverage="0" coveredlines="0" coverablelines="4" totallines="11" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="IEnumerableExtensions" coverage="0" coveredlines="0" coverablelines="3" totallines="10" branchcoverage="" coveredbranches="0" totalbranches="0" />
-      <Class name="Storage" coverage="66.6" coveredlines="36" coverablelines="54" totallines="100" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    <Assembly name="MtgUpgrader" classes="7" coverage="80.3" coveredlines="242" coverablelines="301" totallines="494" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="AsyncOperationExtensions" coverage="0" coveredlines="0" coverablelines="5" totallines="13" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Card" coverage="77" coveredlines="161" coverablelines="209" totallines="251" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="CardCollection" coverage="85.3" coveredlines="35" coverablelines="41" totallines="80" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="HashSetExtensions" coverage="100" coveredlines="4" coverablelines="4" totallines="11" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ScryfallCard" coverage="100" coveredlines="1" coverablelines="1" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="ScryfallDb" coverage="100" coveredlines="6" coverablelines="6" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="Storage" coverage="100" coveredlines="35" coverablelines="35" totallines="61" branchcoverage="" coveredbranches="0" totalbranches="0" />
     </Assembly>
-    <Assembly name="Tests" classes="2" coverage="100" coveredlines="66" coverablelines="66" totallines="233" branchcoverage="" coveredbranches="0" totalbranches="0">
+    <Assembly name="Tests" classes="3" coverage="92" coveredlines="81" coverablelines="88" totallines="282" branchcoverage="" coveredbranches="0" totalbranches="0">
       <Class name="CardPropertyTests" coverage="100" coveredlines="9" coverablelines="9" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" />
       <Class name="CardRelationTests" coverage="100" coveredlines="57" coverablelines="57" totallines="209" branchcoverage="" coveredbranches="0" totalbranches="0" />
+      <Class name="UITests" coverage="68.1" coveredlines="15" coverablelines="22" totallines="49" branchcoverage="" coveredbranches="0" totalbranches="0" />
     </Assembly>
   </Coverage>
 </CoverageReport>

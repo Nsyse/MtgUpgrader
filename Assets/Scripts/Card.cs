@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
 [Serializable]
 public class Card
@@ -19,9 +23,13 @@ public class Card
         private set => _id = value;
     }
 
+    [JsonIgnore]
+    public string Name;
+
     private ICardCollection _manuallyRegisteredBetterCards = new CardCollection();
     private ICardCollection _immediatelyBetterCards = new CardCollection();
     private ICardCollection _immediatelyWorseCards = new CardCollection();
+    private string _imgUrl;
 
     public Card()
     {
@@ -35,6 +43,13 @@ public class Card
         Id = id;
     }
 
+    public Card(ScryfallCard rawCard)
+    {
+        Name = rawCard.name;
+        Id = rawCard.id;
+        _imgUrl = rawCard.ImageLink;
+    }
+    
     public bool IsOutclassed()
     {
         return !_immediatelyBetterCards.IsEmpty();
@@ -219,5 +234,18 @@ public class Card
     public bool MatchesId(Card otherCard)
     {
         return MatchesId(otherCard.Id);
+    }
+
+    public void GetImage()
+    {
+        
+    }
+
+    public async Task<Texture2D> LoadImage()
+    {
+        var getRequest = UnityWebRequestTexture.GetTexture(_imgUrl);
+        await getRequest.SendWebRequest();
+        var result = ((DownloadHandlerTexture)getRequest.downloadHandler).texture;
+        return result;
     }
 }
